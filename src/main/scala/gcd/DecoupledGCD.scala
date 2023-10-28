@@ -4,6 +4,7 @@ package gcd
 
 import chisel3._
 import chisel3.util.Decoupled
+import circt.stage.ChiselStage
 
 class GcdInputBundle(val w: Int) extends Bundle {
   val value1 = UInt(w.W)
@@ -70,4 +71,25 @@ class DecoupledGcd(width: Int) extends Module {
       busy := true.B
     }
   }
+}
+
+/**
+  * This is a trivial example of how to generate SystemVerilog
+  * Please ensure you have installed circt
+  * From within sbt use:
+  * {{{
+  * runMain gcd.DecoupledGcd
+  * }}}
+  * From a terminal shell use:
+  * {{{
+  * sbt 'runMain gcd.DecoupledGcd'
+  * }}}
+  * Testing from mill:
+  * {{{
+  * mill %NAME%.runMain gcd.DecoupledGcd
+  * }}}
+  * You can find generated file named DecoupledGcd.sv
+  */
+object DecoupledGcd extends App {
+  ChiselStage.emitSystemVerilogFile(new DecoupledGcd(16))
 }
